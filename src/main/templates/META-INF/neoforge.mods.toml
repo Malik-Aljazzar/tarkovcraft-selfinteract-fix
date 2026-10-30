@@ -1,0 +1,55 @@
+# NeoForge mod metadata for TarkovCraft Self-Interaction Crash Fix
+
+modLoader="javafml" #mandatory
+loaderVersion="${loader_version_range}" #mandatory
+license="${mod_license}"
+
+[[mods]] #mandatory
+modId="${mod_id}" #mandatory
+version="${mod_version}" #mandatory
+displayName="${mod_name}" #mandatory
+
+description='''
+Fixes crashes in TarkovCraft: Core's entity interaction system when a player ends up as their
+own interaction target.
+
+Root cause (verified against TarkovCraft Core 2.11.2's real bytecode via javap, see
+specification/SPEC.md): EntityInteraction.Context throws IllegalArgumentException("Player and
+target cannot be the same entity") when player == target, and none of the four places that
+build one checks for that first:
+- the on-screen interaction hint (client, every tick, uses the crosshair entity),
+- the sneak + right-click entity interaction handler (client and server),
+- the interaction screen (client),
+- the C2S_RequestInteractionState packet handler (server, entity id comes from the client).
+
+The crosshair entity can be the local player whenever the camera is detached from the player's
+body, e.g. looking through an Exposure camera on a tripod - that crashed the client every tick.
+
+This mod treats "the player themselves" as "no interaction target" at each of those places, so
+TarkovCraft takes its normal "nothing to interact with" path. Interactions with other entities
+are untouched. Install on clients and on the server; either side works on its own.
+'''
+
+[[mixins]]
+config="${mod_id}.mixins.json"
+
+[[dependencies.${mod_id}]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${neo_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="tarkovcraft_core"
+    type="required"
+    versionRange="[${tarkovcraft_core_version},)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
