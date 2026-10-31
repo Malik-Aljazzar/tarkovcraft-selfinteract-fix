@@ -42,10 +42,9 @@ curseforge_project_id=<ID>
 
 ## 2. GitHub-Secret
 
-Repo und CI/CD (`build.yml`, `release.yml` mit GameTests) existieren schon. **Offen:** das Secret
-`CURSEFORGE_API_KEY` ist noch nicht gesetzt. CurseForge-Tokens gelten für den ganzen Account; der
-Token von Menu Audio Controls (`~/.zeta/curseforge_token_menu_audio`) funktioniert also auch hier.
-Setzen: GitHub → Repo → Settings → Secrets and variables → Actions → *New repository secret*.
+Repo und CI/CD (`build.yml`, `release.yml` mit GameTests) existieren schon. **Erledigt
+(2026-10-31):** Secret `CURSEFORGE_API_KEY` gesetzt (eigener Token, lokal in
+`~/.zeta/curseforge_token_tarkov_fix`).
 
 ## 3. Veröffentlichen
 
